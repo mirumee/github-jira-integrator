@@ -39,6 +39,7 @@ class JiraIntegrator:
     def create_new_jira_issue(self, issue, repository):
         issuetype = {"name": utils.get_issue_type(issue["labels"])}
         github_link_field_name = self._get_field_id("GitHub Link")
+        github_author_field_name = self.__get_field_id("GitHub Author")
         github_link = utils.find_github_link(repository["full_name"], issue["number"])
         labels = utils.get_jira_labels(issue["labels"])
         project = utils.find_project(repository)
@@ -49,6 +50,7 @@ class JiraIntegrator:
             "issuetype": issuetype,
             "labels": labels,
             github_link_field_name: github_link,
+            github_author_field_name: issue.get('user', {}).get('login')
         }
 
         self.jira_connection.create_issue(**fields)

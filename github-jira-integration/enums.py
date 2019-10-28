@@ -10,6 +10,7 @@ class JiraIssueType(enum.Enum):
 @enum.unique
 class GitHubAction(enum.Enum):
     OPENED = "opened"
+    CREATED = "created"
     EDITED = "edited"
     LABELED = "labeled"
     UNLABELED = "unlabeled"

@@ -12,6 +12,7 @@ class JiraIntegrator:
         self.jira_connection = JIRA(options, basic_auth=(user, api_token))
         self.event_handlers = {
             enums.GitHubAction.OPENED.value: self.create_new_jira_issue,
+            enums.GitHubAction.CREATED.value: self.create_new_jira_issue,
             enums.GitHubAction.EDITED.value: self.update_jira_issue,
             enums.GitHubAction.LABELED.value: self.update_jira_label,
             enums.GitHubAction.UNLABELED.value: self.update_jira_label,

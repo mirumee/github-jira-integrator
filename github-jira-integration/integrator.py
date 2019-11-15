@@ -5,6 +5,9 @@ from jira import JIRA
 import enums
 import utils
 
+COMPONENT_ID_DASHBOARD = "10001"
+COMPONENT_ID_DOCS = "10008"
+
 
 class JiraIntegrator:
     def __init__(self, user, api_token, host):
@@ -51,8 +54,21 @@ class JiraIntegrator:
             "issuetype": issuetype,
             "labels": labels,
             github_link_field_name: github_link,
-            github_author_field_name: issue.get('user', {}).get('login')
+            github_author_field_name: issue.get("user", {}).get("login"),
         }
+
+        component = None
+
+        try:
+            if "mirumee/saleor-dashboard" in github_link:
+                component = self.jira_connection.component(COMPONENT_ID_DASHBOARD)
+            if "mirumee/saleor-docs" in github_link:
+                component = self.jira_connection.component(COMPONENT_ID_DOCS)
+        except Exception as err:
+            logging.exception(f"Failed to assign component: {repr(err)}")
+
+        if component:
+            fields["components"] = [{"name": component.name}]
 
         self.jira_connection.create_issue(**fields)
 

@@ -63,10 +63,10 @@ class JiraIntegrator:
                 component = self.jira_connection.component(COMPONENT_ID_DASHBOARD)
             if "mirumee/saleor-docs" in github_link:
                 component = self.jira_connection.component(COMPONENT_ID_DOCS)
-            if component:
-                fields["components"] = [{"name": component.name}]
         except Exception as err:
             logging.exception(f"Failed to assign component: {repr(err)}")
+        if component:
+            fields["components"] = [{"name": component.name}]
 
         self.jira_connection.create_issue(**fields)
 
